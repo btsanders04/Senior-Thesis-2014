@@ -2,7 +2,7 @@ import shiffman.box2d.*;
 import org.jbox2d.collision.shapes.*;
 import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
-
+import org.jbox2d.dynamics.contacts.*;
 import ddf.minim.analysis.*;
 import ddf.minim.*;
 
@@ -21,12 +21,12 @@ Boundary[] boundaries;
 float y;
 float easing =0.1;
 void setup() {
-  size(500,300);
+  size(1030,1030);
   box2d = new Box2DProcessing(this);
   Vec2 gravity = new Vec2(0,-10);
   box2d.createWorld(gravity);
   balls = new ArrayList<Ball>();
-  
+  box2d.listenForCollisions();
 //  timeStep = 1.0f / 60.0f;
 //  velocityIterations = 6;
 //  positionIterations = 2;
@@ -64,7 +64,7 @@ void draw() {
   if(mousePressed){
      float sz = random(4, 8);
     particles.add(new Particle(mouseX, mouseY, sz, random(0,100)));
-    if(particles.size()>200){
+    if(particles.size()>400){
       particles.get(0).killBody();
       particles.remove(0);
       
@@ -97,14 +97,16 @@ void draw() {
    // boundaries.add(bound);
 //  }
 
-float targety=song.mix.level()*1500;
+
+//println(
+Vec2 v = new Vec2(0,song.mix.level()*50);
+float targety=song.mix.level()*1000;
 float dy = targety - y;
   if(abs(dy) > 1) {
     y += dy * easing;
   }
-//println(
-Vec2 v = new Vec2(0,y/50);
- println(v);
+//float m =map(y,0,targety,10,200);
+// println(v);
  Boundary ground = new Boundary(width/2,height,width+10,y,v);
  ground.display();
   box2d.step();
