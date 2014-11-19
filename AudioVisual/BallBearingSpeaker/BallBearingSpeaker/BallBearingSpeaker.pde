@@ -64,6 +64,11 @@ void draw() {
   if(mousePressed){
      float sz = random(4, 8);
     particles.add(new Particle(mouseX, mouseY, sz, random(0,100)));
+    if(particles.size()>200){
+      particles.get(0).killBody();
+      particles.remove(0);
+      
+    }
     //Ball p = new Ball();
    // balls.add(p);
   } 
