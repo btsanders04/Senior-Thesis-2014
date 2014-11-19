@@ -3,6 +3,7 @@ import java.util.*;
 
 Board b;
 Player p;
+Lava l;
 EndGame eg;
 TextScreen ts;
 int state=0;
@@ -18,7 +19,6 @@ String saved = "";
 
 void setup(){
   size(500,500);
-  
   f = createFont("Arial",16,true);
 
   ts = new TextScreen();
@@ -32,11 +32,15 @@ void draw(){
     break;
     case(1): b= new Board(width,height);
              p= new Player(randomTile());
+             l = new Lava(randomTile());
              eg = new EndGame(randomTile());
+             b.setup();
              state=2;
     break;
-    case(2): b.draw();
+    case(2): l.draw();
+             b.draw();
              p.draw();
+             
              eg.draw();
              if(eg.Eaten())
              state=3;
