@@ -1,114 +1,124 @@
-PImage img;
+
+import controlP5.*;
+
+PImage img1;
 PImage img2;
+PImage img3;
+PImage img4;
+PImage img5;
+PImage img6;
+PImage img7;
+PImage img8;
+PImage img9;
+PImage img10;
+float contrast;
+float bright;
+PImage backgroundImg;
+
 int numPics;
 ArrayList<Picture> picArray = new ArrayList<Picture>();
-Picture pic;
-Picture pic2;
-Picture pic3;
-Picture pic4;
-Picture pic5;
-Picture pic6;
-Picture pic7;
-Picture pic8;
-Picture pic9;
-Picture pic10;
 Album picAlbum = new Album(picArray);
-  float startAlbumPosnX;
-  float startAlbumPosnY;
 
 
 
 void setup() {
   size(1040,1040,P3D);
-  startAlbumPosnX=200;
-  startAlbumPosnY=200;
-  img = loadImage("testPic1.jpg");
-  img2=loadImage("testpic2.jpg");
-  pic = new Picture(img);
-  pic2 = new Picture(img2);
-  pic3= new Picture(img);
-  pic4 = new Picture(img2);
-  pic5= new Picture(img);
-  pic6 = new Picture(img2);
-  pic7= new Picture(img);
-  pic8 = new Picture(img2);
-  pic9= new Picture(img);
-  pic10 = new Picture(img2);
+  picAlbum.startAlbumPosnX=200;
+  picAlbum.startAlbumPosnY=200;
+  img1=loadImage("test1.JPG");
+  img2=loadImage("test2.JPG");
+  img3=loadImage("test3.JPG");
+  img4=loadImage("test4.JPG");
+  img5=loadImage("test5.JPG");
+  img6=loadImage("test6.JPG");
+  img7=loadImage("test7.PNG");
+  backgroundImg=loadImage("WoodBackground.jpg");
+  backgroundImg.resize(1040,1040);
+ // img8=loadImage("testpic8.JPG");
+//  img9=loadImage("testpic9.JPG");
+//  img10=loadImage("testpic10.JPG");
+     contrast = 1;
+     bright = 0;
 
-  
-      picArray.add(pic);
-      picArray.add(pic2);
-      picArray.add(pic3);
-      picArray.add(pic4);
-      picArray.add(pic5);
-      picArray.add(pic6);
-      picArray.add(pic7);
-      picArray.add(pic8);
-      picArray.add(pic9);
-      picArray.add(pic10);
-  
-  background(255);
+    picArray.add(new Picture(img1));
+    picArray.add(new Picture(img2));
+    picArray.add(new Picture(img3));
+    picArray.add(new Picture(img4));
+    picArray.add(new Picture(img5));
+    picArray.add(new Picture(img6));
+    picArray.add(new Picture(img7));
 
+//    picArray.add(new Picture(img8));
+//    picArray.add(new Picture(img9));
+//    picArray.add(new Picture(img10));
+  
+  background(backgroundImg);
+  println("All images initalized");
 }
 
 void draw() {
-   background(255);
+
+   background(backgroundImg);
   picAlbum.pictureSpiral();
-//  println(frameRate);
+  println(frameRate);
 }
 
 
+void keyPressed() {
 
-
-//void pictureSpiral() {
-  
-//  background(255);
-  
- /* for(int i=0;i<picArray.size();i++)
-    {
-      int picWidth = picArray.get(i).width;
-      int picHeight = picArray.get(i).height;
-      float startAngle=i*(2*PI/picArray.size());
-    pushMatrix();
-    translate(400,400);
-    rotate(countAngle + startAngle);
-    rotateY(PI/4);
-   image(picArray.get(i),20,20,picWidth,picHeight);
-   
-    PVector v = new PVector(picWidth,picHeight);
-    PVector m = new PVector(mouseX,mouseY);
-    PVector r = new PVector(screenX(v.x,v.y),screenY(v.x,v.y));
-    noFill();
-    noStroke();
-    }
-    if(r.dist(m)<40)
-      {
-
-        
-        rotateY(-PI/4);
-        
-        countAngle=0;
-        startAngle=0;
-       
-       if(mousePressed) {
-         pushMatrix();
-         fill(255);
-         rotateY(PI/4);
-         noStroke();
-         rect(20,20,picWidth,picHeight);
-         popMatrix();
+   switch(key) {
+     case 'q': if(contrast >= 0) 
+         contrast-=0.01;
+         bright+=1;
+         break;
+     
+     case 'w': if(contrast <= 5) 
+         contrast+=0.01;
+         bright-=1;
+         break;
          
-         translate(-r.x,-r.y);
-         image(picArray.get(i),mouseX,mouseY,picWidth,picHeight);
+     case 'e': if(bright >= -128)
+         bright+= 1;
+         break;
+     
+     case 'd': if(bright <= 128)
+         bright-= 1;
+         break;
+         
+     case 'r':  contrast=1;
+                bright=0;
+                
+         break;
+     
+     case 's': 
+     
+       for(int i=0; i<picAlbum.workingAlbum.size();i++){
+         Picture tempPic = picAlbum.workingAlbum.get(i);
+         if(tempPic.state==3) 
+         {
+           tempPic.savePic();
+         }
        }
-    }
-    else {
-      }
       
-    ellipse(v.x-30,v.y,picWidth,picHeight/2);
-    popMatrix();
-  
-    }
-  countAngle = (countAngle+0.005)%TWO_PI;
-  println(frameRate);*/
-//}
+       break;
+       
+     case 'n':
+     
+        for(int i=0; i<picAlbum.workingAlbum.size();i++){
+         Picture tempPic = picAlbum.workingAlbum.get(i);
+         PImage imgOutput = new PImage(tempPic.albumPic.width,tempPic.albumPic.height);
+         if(tempPic.state==3) 
+         {
+           tempPic.invertPic(tempPic.albumPic, imgOutput );
+           tempPic.albumPic=imgOutput;
+        
+         }
+       }
+       
+       break;
+     
+     default:
+       break;  
+   }
+}   
+
