@@ -61,7 +61,7 @@ class Particle {
     stroke(0);
     strokeWeight(1);
    // println(song.mix.level());
-    if(song.mix.level()>.1){
+    if(song.mix.level()>.06){
      intensity=100;
     }
     col=color(c,100,intensity);
@@ -90,7 +90,7 @@ class Particle {
     FixtureDef fd = new FixtureDef();
     fd.shape = cs;
     // Parameters that affect physics
-   // fd.density = .4;
+    fd.density = 1;
     fd.friction = 0.01;
     fd.restitution = 0.6;
 

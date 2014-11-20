@@ -99,7 +99,7 @@ void draw() {
 
 
 //println(
-Vec2 v = new Vec2(0,song.mix.level()*50);
+Vec2 v = new Vec2(0,song.mix.level()*70);
 float targety=song.mix.level()*1000;
 float dy = targety - y;
   if(abs(dy) > 1) {
