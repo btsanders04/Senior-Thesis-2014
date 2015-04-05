@@ -2,14 +2,14 @@ class Board{
   
   int xSize;
   int ySize;
-  Tile[] tiles = new Tile[(width/tileSize)*(height/tileSize)]();
+  Tile[] tiles = new Tile[(width/tileSize)*(height/tileSize)];
   Board(int x, int y){
     xSize=x;
     ySize=y;
     int i=0;
     for(int xt=0;xt<width/tileSize;xt++){
      for(int yt=0;yt<height/tileSize;yt++){
-       tiles[i]= new PVector(xt*tileSize + tileSize/2,yt*tileSize + tileSize/2);
+       tiles[i]= new Tile(new PVector(xt*tileSize + tileSize/2,yt*tileSize + tileSize/2));
     //   println(tiles[i].x + " " + tiles[i].y);
        i++;
      }
@@ -22,12 +22,13 @@ class Board{
     for(int x=0;x<xSize;x+=tileSize){
       
       for(int y=0;y<ySize;y+=tileSize){
-       tiles[i]= new Tile(x,y);
+       tiles[i]= new Tile(new PVector(x,y));
        i++;
       }     
     }
     
   }
   
-  void draw();
+  void draw(){
+  }
 }

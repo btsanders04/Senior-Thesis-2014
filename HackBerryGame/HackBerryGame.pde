@@ -102,5 +102,5 @@ public static boolean isNumeric(String str)
 
 PVector randomTile(){
   
-  return b.tiles[new Random().nextInt(b.tiles.length)];
+ return b.tiles[new Random().nextInt(b.tiles.length)].p;
 }

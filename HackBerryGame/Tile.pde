@@ -4,7 +4,8 @@ class Tile {
     p=pos;
   }
   
-  draw(){
+  void draw(){
+    stroke(256);
     rectMode(CENTER);
     rect(p.x,p.y,tileSize,tileSize);
   }

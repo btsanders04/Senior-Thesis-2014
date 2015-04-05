@@ -61,7 +61,7 @@ class Particle {
     stroke(0);
     strokeWeight(1);
    // println(song.mix.level());
-    if(song.mix.level()>.06){
+    if(song.mix.level()>maxintensity){
      intensity=100;
     }
     col=color(c,100,intensity);
