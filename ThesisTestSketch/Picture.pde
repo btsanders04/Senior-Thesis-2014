@@ -90,13 +90,32 @@ class Picture {
   }
   
   void selectPic() {
-    
-    ArrayList<TuioCursor> tuioCursorList = tuioClient.getTuioCursorList();
+     ArrayList<TuioCursor> tuioCursorList = tuioClient.getTuioCursorList();
     for(int i=0; i<tuioCursorList.size(); i++) {
       TuioCursor tcur = tuioCursorList.get(i);
-      ArrayList<TuioPoint> pointList = tcur.getPath();
+      m = new PVector(tcur.getScreenX(width), tcur.getScreenY(height));    
+    ArrayList<PVector> mList
+    ArrayList<TuioPoint> pointList = tcur.getPath();
+    }
+    
+    
+       if(closeToPic() && state!=2 && !picAlbum.picActive){
+    //  println("closeToPic()");
+      if(!picAlbum.beingEdited) state=2;
+      else if(picAlbum.beingEdited && state==3 && mousePressed) state=2;
+      else if(state!=3 && !picAlbum.beingEdited) state=1;
+       }
+   
+      else if(!mousePressed && state!=3){
+      state=0;
+  }
+  }   
+  
+  boolean closeToPic() {
+  
+   
      
-      if (pointList.size()>0) {
+     /* if (pointList.size()>0) {
        // stroke(0,0,255);
         TuioPoint start_point = pointList.get(0);
         for (int j=0;j<pointList.size();j++) {
@@ -105,27 +124,11 @@ class Picture {
            start_point = end_point;
         }
       }
-       if(closeToPic()&& state!=2 && !picAlbum.picActive){
-      println("closeToPic()");
-      if(!picAlbum.beingEdited) state=2;
-      else if(picAlbum.beingEdited && state==3 && mousePressed) state=2;
-      else if(state!=3 && !picAlbum.beingEdited) state=1;
-      }
-    }
-  //  m = new PVector(mouseX, mouseY);    else if(!mousePressed && state!=3){
-      state=0;
-     
-    }   
-  }
-  
-  boolean closeToPic() {
-  
-    
+    */
         
-         if(absPosn.dist(new PVector(tcur.getScreenX(width),tcur.getScreenY(height))) < picAlbum.grabRange){
+         if(absPosn.dist(m) < picAlbum.grabRange){
           return true;
           }
-  
   
     return false;
   }

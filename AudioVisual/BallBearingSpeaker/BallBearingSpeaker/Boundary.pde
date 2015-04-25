@@ -1,6 +1,7 @@
 class Boundary {
  
-//A boundary is a simple rectangle with x, y, width, and height.
+//A boundary is a simple rectangle with x, y, width, and height. Is also given an initial velocity even though it is stationary. This velocity effects other
+// objects that interact with the boundary acting as an opposing force that aggressively pushes back at opposing objects.
   float x,y;
   float w,h;
   Vec2 velocity;
@@ -22,23 +23,24 @@ class Boundary {
     bd.setLinearVelocity(velocity);
     bd.bullet=true;
     b = box2d.createBody(bd);
-  //  println(velocity);
- //   b.setLinearVelocity(velocity);
     box2dW = box2d.scalarPixelsToWorld(w/2);
     box2dH = box2d.scalarPixelsToWorld(h/2);
     PolygonShape ps = new PolygonShape();
 //The PolygonShape is just a box.
     ps.setAsBox(box2dW, box2dH);
- 
-//Using the createFixture() shortcut
+
+//adds the shape to the physics body
     b.createFixture(ps,1);
   }
  
+ 
+//nullifies the physics body so it is no longer updated in the world 
  void killBody() {
     box2d.destroyBody(b);
     b = null;
   }
-//Since we know it can never move, we can just draw it the old-fashioned way, using our original variables. No need to query Box2D.
+  
+//draws the boundary on the screen
   void display() {
      // We look at each body and get its screen position
     Vec2 pos = box2d.getBodyPixelCoord(b);
@@ -51,14 +53,7 @@ class Boundary {
     rotate(-a);
     noFill();
     noStroke();
-  //  fill(175);
-//stroke(0);
     rect(0, 0, w, h);
     popMatrix();
   }
-  
-//  void applyForce(Vec2 v){
-//    b.applyLinearImpulse(v,b.getWorldCenter(),true);
-//  }
- 
 }

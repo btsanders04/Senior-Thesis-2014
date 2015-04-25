@@ -7,15 +7,23 @@
 
 class Particle {
 
-  // We need to keep track of a Body and a radius
+  
+  //Box2D physics body for the particle
   Body body;
+  
+  //radius 
   float r;
+  
+  //brightness of the particle, changes with volume of the music
   float intensity=20;
+  
+  //color of the particle, created at random
   color col;
   float c;
 
   Particle(float x, float y, float r_, float c_) {
     r = r_;
+    
     // This function puts the particle in the Box2d world
     makeBody(x, y, r);
     body.setUserData(this);
@@ -29,16 +37,13 @@ class Particle {
     box2d.destroyBody(body);
   }
 
-  // Change color when hit
-  void change() {
-    col = color(c,100,100);
-  }
 
   // Is the particle ready for deletion?
   boolean done() {
-    // Let's find the screen position of the particle
+    // Find the screen position of the particle
     Vec2 pos = box2d.getBodyPixelCoord(body);
-    // Is it off the bottom of the screen?
+    // If the particles somehow escapes the well through "tunneling" kill it
+    //starting to sound like a bunch of electrons in multiple energy states
     if (pos.y > height+r*2) {
       killBody();
       return true;
@@ -55,22 +60,21 @@ class Particle {
     float a = body.getAngle();
     pushMatrix();
     translate(pos.x, pos.y);
-   // println(pos.y);
     rotate(a);
     fill(col);
     stroke(0);
     strokeWeight(1);
-   // println(song.mix.level());
+ 
+ //volume of the music determines if particles light up or not
     if(song.mix.level()>maxintensity){
      intensity=100;
     }
     col=color(c,100,intensity);
     ellipse(0, 0, r*2, r*2);
+    
+    //decays particles back to original intensity after being "excited"
      intensity *= 0.95;
     if ( intensity < 20 ) intensity = 20;
-    
-    // Let's add a line so we can see the rotation
- //   line(0, 0, r, 0);
     popMatrix();
   }
 
