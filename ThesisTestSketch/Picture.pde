@@ -6,7 +6,7 @@ class Picture {
     
      PVector picPosn;
      PVector absPosn;
-     PVector m;
+     PVector m = new PVector(0,0);
      PVector v;
      PVector editPicPosn;
      
@@ -20,7 +20,7 @@ class Picture {
      
      float startX;
      float startY;
-     int state=0;
+     int state;
      int picWidth;
      int picHeight;
      int editBoundary=width/2;
@@ -32,7 +32,7 @@ class Picture {
      
      String textValue = "";
 
-     
+     boolean tuioActive;
     
   Picture(PImage p) {
     picPosn = new PVector(xOriginAlbum, yOriginAlbum);
@@ -51,89 +51,75 @@ class Picture {
     yPointOnPic=picHeight*.75;
   }
   
+  
+  //does the appropriate method for the picture based on the state it is in
   void Render() {
-   
     
     switch(state) {
       case 0: 
-      
-      rotateCase(albumPic);  
-
-
-    
+      rotateCase(albumPic); 
       break;
      
      case 1: 
-     
        selectCase(albumPic);
-          
-         
-      break;
+     break;
       
      case 2:
-     
         moveCase(albumPic);
-        
-        break;
+     break;
       
-      
-      case 3:
-        
+     case 3:   
         enhancedPic = editCase(albumPic);
-       
-        
-      
-      break;
+     break;
     }
 
      selectPic();
   }
   
+  
+  //selects a pic if the TUIO cursor lands on it  
   void selectPic() {
-     ArrayList<TuioCursor> tuioCursorList = tuioClient.getTuioCursorList();
+
+    ArrayList<TuioCursor> tuioCursorList = tuioClient.getTuioCursorList();
     for(int i=0; i<tuioCursorList.size(); i++) {
       TuioCursor tcur = tuioCursorList.get(i);
-      m = new PVector(tcur.getScreenX(width), tcur.getScreenY(height));    
-    ArrayList<PVector> mList
-    ArrayList<TuioPoint> pointList = tcur.getPath();
-    }
-    
-    
-       if(closeToPic() && state!=2 && !picAlbum.picActive){
-    //  println("closeToPic()");
-      if(!picAlbum.beingEdited) state=2;
-      else if(picAlbum.beingEdited && state==3 && mousePressed) state=2;
-      else if(state!=3 && !picAlbum.beingEdited) state=1;
+      m = new PVector(tcur.getScreenX(width), tcur.getScreenY(height));
+      tuioActive=true; 
+    }  
+      if(!tuioActive)
+      {
+        m= new PVector(0,0);
+      }
+     if(closeToPic() && state!=2 && !picAlbum.picActive){
+        if(tuioActive && !picAlbum.beingEdited) state=2;
+        else if(picAlbum.beingEdited && state==3 && tuioActive) state=2;
+        else if(state!=3 && !picAlbum.beingEdited) state=1;
        }
    
-      else if(!mousePressed && state!=3){
-      state=0;
-  }
+      else if((tuioActive && state!=3  && state!=2) || state==1){
+        state=0;
+      }
+      else if(state==3 && tuioActive){
+        state=2;
+      }
+      if(state==2  && !tuioActive){
+        state=0;
+      }
+      tuioActive=false;
   }   
-  
+ 
+ 
+ //determines if the TUIOcursor is close enough to a picture in order to grab it 
   boolean closeToPic() {
   
-   
-     
-     /* if (pointList.size()>0) {
-       // stroke(0,0,255);
-        TuioPoint start_point = pointList.get(0);
-        for (int j=0;j<pointList.size();j++) {
-           TuioPoint end_point = pointList.get(j);
-          // line(start_point.getScreenX(width),start_point.getScreenY(height),end_point.getScreenX(width),end_point.getScreenY(height));
-           start_point = end_point;
-        }
-      }
-    */
-        
-         if(absPosn.dist(m) < picAlbum.grabRange){
+      if(absPosn.dist(m) < picAlbum.grabRange){
           return true;
           }
-  
-    return false;
+        
+      return false;
   }
    
-  
+  //changes contrast and brightness while in editing mode
  void ContrastAndBrightness(PImage input, PImage output,float cont,float bright)
  {
    int w = input.width;
@@ -174,13 +160,14 @@ class Picture {
    output.updatePixels();
  }
  
+ 
+ //case for the image to be edited. returns an enhanced img that will replace the default img if returned to the album
  PImage editCase(PImage input) {
         
         picAlbum.grabRange=200;
         fill(255,255,255,100);
         input.resize(0,height/2);
         rect(width/2-startX,-startX,input.width,input.height);
-    //    picAlbum.grabRange=200;
         absPosn = new PVector(picPosn.x+xPointOnPic, picPosn.y+yPointOnPic);
         absPosn.x=editPicPositionX + startX;
         absPosn.y=editPicPositionY + startX;
@@ -192,6 +179,7 @@ class Picture {
         return imgEnhanced;
  }
  
+ //case for selecting the picture. stops the rotation of the album and shows what picture has been selected
  void selectCase(PImage input) {
    
         
@@ -201,6 +189,8 @@ class Picture {
         image(input,picPosn.x,picPosn.y,picWidth,picHeight);         
  }
  
+ 
+ //if picture is not selected it will remain in the default rotate state which is the whole of the album
  void rotateCase(PImage input) {
    
          picAlbum.grabRange=50;
@@ -216,18 +206,20 @@ class Picture {
          absPosn.y += (startX);
  }
  
+ //allows the user to move the picture anywhere on the screen as long as they are touching it
  void moveCase(PImage input) {
    
         picAlbum.grabRange=50;
         fill(255,255,255,100);
         rect(m.x-startX,m.y-startX,picWidth,picHeight);
         image(input,m.x-startX,m.y-startX,picWidth,picHeight);
-        if(m.x>editBoundary && !mousePressed){
+        if(m.x>editBoundary && !tuioActive){
           state=3;
         }
    
  }
  
+ //saves the edited picture to the album
  void savePic(){
    
     albumPic.copy(enhancedPic,0,0,enhancedPic.width,enhancedPic.height,0,0,enhancedPic.width,enhancedPic.height);
@@ -235,6 +227,8 @@ class Picture {
     bright=0;
  }
  
+ 
+ //inverts the colors of the picture creating a negative
  void invertPic(PImage input, PImage output) {
   
    int w = input.width;

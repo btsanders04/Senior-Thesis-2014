@@ -2,13 +2,9 @@ import TUIO.*;
 TuioProcessing tuioClient;
 boolean verbose = false; // print console debug messages
 boolean callback = true; // updates only after callbacks
-float cursor_size = 15;
-float object_size = 60;
-float table_size = 760;
-float scale_factor = 1;
-PFont font;
 
 
+//dummy images loaded into the sketch
 PImage img1;
 PImage img2;
 PImage img3;
@@ -16,13 +12,16 @@ PImage img4;
 PImage img5;
 PImage img6;
 PImage img7;
-PImage img8;
-PImage img9;
-PImage img10;
+
+//changing variables for editing
 float contrast;
 float bright;
+
+//background Img
 PImage backgroundImg;
 
+
+//List of Pictures
 int numPics;
 ArrayList<Picture> picArray = new ArrayList<Picture>();
 Album picAlbum = new Album(picArray);
@@ -30,60 +29,52 @@ Album picAlbum = new Album(picArray);
 
 
 void setup() {
-  size(1040,1040,P3D);
+  size(1000,750,P3D);
+  
+  //determines where to start the rotating album on the screen
   picAlbum.startAlbumPosnX=200;
   picAlbum.startAlbumPosnY=200;
-  img1=loadImage("test1.JPG");
-  img2=loadImage("test2.JPG");
-  img3=loadImage("test3.JPG");
-  img4=loadImage("test4.JPG");
-  img5=loadImage("test5.JPG");
-  img6=loadImage("test6.JPG");
-  img7=loadImage("test7.PNG");
-  backgroundImg=loadImage("WoodBackground.jpg");
-  backgroundImg.resize(1040,1040);
- // img8=loadImage("testpic8.JPG");
-//  img9=loadImage("testpic9.JPG");
-//  img10=loadImage("testpic10.JPG");
-     contrast = 1;
-     bright = 0;
+  
+  //load in all the sample pictues
+  img1=loadImage("DSC_0036.JPG");
+  img2=loadImage("DSC_0053.JPG");
+  img3=loadImage("DSC_0059.JPG");
+  img4=loadImage("DSC_0270.JPG");
+  img5=loadImage("DSC_0278.JPG");
+  img6=loadImage("DSC_0287.JPG");
+  img7=loadImage("DSC_0326.JPG");
+  backgroundImg=loadImage("backgroundImg.png");
+  backgroundImg.resize(1000,750);
 
-    picArray.add(new Picture(img1));
-    picArray.add(new Picture(img2));
-    picArray.add(new Picture(img3));
-    picArray.add(new Picture(img4));
-    picArray.add(new Picture(img5));
-    picArray.add(new Picture(img6));
-    picArray.add(new Picture(img7));
+  //set initial contrast and brightness
+  contrast = 1;
+  bright = 0;
 
-//    picArray.add(new Picture(img8));
-//    picArray.add(new Picture(img9));
-//    picArray.add(new Picture(img10));
+  picArray.add(new Picture(img1));
+  picArray.add(new Picture(img2));
+  picArray.add(new Picture(img3));
+  picArray.add(new Picture(img4));
+  picArray.add(new Picture(img5));
+  picArray.add(new Picture(img6));
+  picArray.add(new Picture(img7));
   
   background(backgroundImg);
   println("All images initalized");
   
+  //start TUIO listening
   tuioClient = new TuioProcessing(this);
 }
 
 void draw() {
   background(backgroundImg);
 
-  
-  float obj_size = object_size*scale_factor; 
-  float cur_size = cursor_size*scale_factor; 
-  
-  
-  
-
-  
-  
- 
+  //everything is done through the picture album so the only method called is pictureSpiral()
   picAlbum.pictureSpiral();
- // println(frameRate);
+
 }
 
 
+//used to edit the pictures once they are in the editing state
 void keyPressed() {
 
    switch(key) {
