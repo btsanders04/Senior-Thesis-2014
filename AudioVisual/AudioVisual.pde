@@ -41,7 +41,7 @@ Matrix r;
 
 void setup(){
   
-  size(1030,1030,P3D);
+  size(1000,750,P3D);
   stars=new ArrayList<Star>();
   r = new Matrix();
   minim = new Minim(this);
@@ -69,7 +69,6 @@ void setup(){
 void draw() {
  background(0);
  fill(255);
- text("framerate: " + (int)frameRate,12,16);
  noFill();
  pushMatrix();
  translate(width/2,height/2);

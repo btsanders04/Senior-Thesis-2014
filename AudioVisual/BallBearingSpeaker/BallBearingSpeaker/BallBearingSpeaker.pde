@@ -48,7 +48,7 @@ int bounce = 120;
 void setup() {
   
   
-  size(1030, 930);
+  size(1000, 750);
   
   //create A box2D world allowing for physics of particles
   box2d = new Box2DProcessing(this);
