@@ -1,3 +1,7 @@
+
+//individual stars in the flying star field. They grow depending on if their is a "kick" in the beat. This is just a minim term that 
+//listens for when a low frequency drum beat is played
+
 public class Star{
 
   PVector origin;
@@ -17,6 +21,7 @@ public class Star{
     z=orig.z;
   }
   
+  //stars are given a velocity affected by a global acceleration called gravity
   public void draw(){
     z= velocity*time + .5*gravity*(float)Math.pow(time,2);
     pushMatrix();
