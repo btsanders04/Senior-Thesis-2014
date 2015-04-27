@@ -19,9 +19,6 @@ Minim minim;
 //loads streaming URL
 AudioPlayer song;
 
-//float timeStep;
-//int velocityIterations;
-//int positionIterations;
 
 Box2DProcessing box2d;
 
